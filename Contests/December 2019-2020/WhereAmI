@@ -1,0 +1,146 @@
+import java.io.*;
+import java.util.*;
+public class whereami 
+{
+	//https://stackoverflow.com/questions/19579568/most-repeating-character-in-a-string
+	private static int findMaxChar(String str) {
+	    char[] array = str.toCharArray();
+	    int maxCount = 1;
+	    char maxChar = array[0];
+	    for(int i = 0, j = 0; i < str.length() - 1; i = j){
+	        int count = 1;
+	        while (++j < str.length() && array[i] == array[j]) {
+	            count++;
+	        }
+	        if (count > maxCount) {
+	            maxCount = count;
+	            maxChar = array[i];
+	        }
+	    }
+	    for(int i = 0; i < str.length() - 1; i ++)
+	    {
+	    	if(str.charAt(i) == maxChar && str.charAt(i+1) == maxChar)
+	    	{
+	    		maxCount --;
+	    	}
+	    }
+	    return maxCount + 1;
+	}
+	  static boolean uniqueCharacters(String str) 
+	    { 
+		  //https://www.geeksforgeeks.org/determine-string-unique-characters/
+	        for (int i = 0; i < str.length(); i++) 
+	            for (int j = i + 1; j < str.length(); j++) 
+	                if (str.charAt(i) == str.charAt(j)) 
+	                    return false; 
+	        return true; 
+	    } 
+	
+	 static int getEndingIndex(String str, int n, int i) 
+	    { 
+	        i++; 
+	        while (i < n) { 
+	            char curr = str.charAt(i); 
+	            char prev = str.charAt(i - 1); 
+	            if ((curr == 'a' && prev == 'z') || 
+	                (curr - prev == 1)) 
+	                i++; 
+	            else
+	                break; 
+	        } 
+	        return i - 1; 
+	    } 
+	    static int largestSubStr(String str, int n) 
+	    { 
+	        int len = 0; 
+	        int i = 0; 
+	        while (i < n) { 
+	            int end = getEndingIndex(str, n, i); 
+	            len = Math.max(end - i + 1, len); 
+	            i = end + 1; 
+	        } 
+	  
+	        return len; 
+	    } 
+	static boolean allCharactersSame(String s) 
+	{ 
+	    int n = s.length(); 
+	    for (int i = 1; i < n; i++) 
+	        if (s.charAt(i) != s.charAt(0)) 
+	            return false; 
+	          
+	    return true; 
+	} 
+	public static void main(String[] args) throws IOException
+	{
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("whereami.out")));
+		BufferedReader f = new BufferedReader(new FileReader("whereami.in"));
+		StringTokenizer st = new StringTokenizer(f.readLine());
+		int l = Integer.parseInt(st.nextToken());
+		String str = f.readLine();
+		String test = "";
+		String without = "";
+		int count = 0;
+		if(uniqueCharacters(str))
+		{
+			out.println(1);
+			out.close();
+			return;
+		}
+		if(l == 1)
+		{
+			out.println(0);
+			out.close();
+			return;
+		}
+		else if(l == 2 && str.substring(0,1).equals(str.substring(1,2)))
+		{
+			out.println(2);
+			out.close();
+			return;
+		}
+		if(allCharactersSame(str))
+		{
+			out.println(l);
+			out.close();
+			return;
+		}
+		ArrayList<Integer> ans = new ArrayList<Integer>();
+		outer : for(int i = 0; i < l-1; i ++)
+		{
+			for(int j = i+1; j < l; j ++)
+			{
+				without = "";
+				test = "";
+				int p = 0;
+				test = str.substring(i,j);
+				without = str.substring(j);
+				if(without.contains(test))
+				{
+					if(without.contains(test) && test.contains(without))
+					{
+						count ++;
+					}
+					System.out.println(ans);
+					ans.add(Math.abs(j-i) + count);
+					p = 0;
+					count = 0;
+					continue;
+				}
+			}
+		}
+		ans.add(findMaxChar(str) - 1);
+		System.out.println(findMaxChar(str) - 1);
+		if(l%2 == 0 && str.substring(0,l/2).equals(str.substring(l/2)))
+		{
+			out.println(l/2 + 1);
+			out.close();
+			return;
+		}
+		ans.add((largestSubStr(str,str.length()) - 1) / 2 + 1);
+		System.out.println(ans);
+		Collections.sort(ans);
+		out.println((Math.max(ans.get(ans.size()-1), count) + 1));
+		out.close();
+	}
+}
