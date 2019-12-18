@@ -1,0 +1,59 @@
+import java.io.*;
+import java.util.*;
+public class gymnastics 
+{
+	public static void main(String[] args) throws IOException
+	{
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("gymnastics.out")));
+		BufferedReader f = new BufferedReader(new FileReader("gymnastics.in"));
+		StringTokenizer st = new StringTokenizer(f.readLine());
+		int sessions = Integer.parseInt(st.nextToken());
+		int cows = Integer.parseInt(st.nextToken());
+		int[][] x = new int[sessions][cows];
+		for(int i = 0; i < sessions; i ++)
+		{
+			if(cows - i != 1)
+			{
+				st = new StringTokenizer(f.readLine());
+			}
+			for(int j = 0; j < cows; j ++)
+			{
+				x[i][j] = Integer.parseInt(st.nextToken());
+			}
+		} 
+		int ans = 0;
+		int sweep = 0;
+		int reversesweep = 0;
+		for(int i = 1; i < cows + 1; i ++)
+		{
+			for(int j = i + 1; j < cows + 1; j ++)
+			{
+				for(int k = 0; k < sessions; k ++)
+				{
+					for(int m = 0; m < cows; m ++)
+					{
+						System.out.println(x[k][m] + " " + i + " " + j);
+						if(x[k][m] == i)
+						{
+							sweep++;
+							break;
+						}
+						if(x[k][m] == j)
+						{
+							reversesweep ++;
+							break;
+						}
+					}
+				}
+				if(sweep == sessions || reversesweep == sessions)
+				{
+					ans ++;
+				}
+				reversesweep = 0;
+				sweep = 0;
+			}
+		}
+		out.println(ans);
+		out.close();
+	}
+}
