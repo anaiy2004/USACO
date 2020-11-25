@@ -1,0 +1,31 @@
+import java.io.*;
+import java.util.*;
+public class OutOfSorts 
+{
+	public static void main(String[] args) throws IOException
+	{
+		BufferedReader f = new BufferedReader(new FileReader("sort.in"));
+		StringTokenizer st = new StringTokenizer(f.readLine());
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("sort.out")));
+		int n = Integer.parseInt(st.nextToken());
+		long[] original = new long[n];
+		for(int i = 0; i < n; i ++)
+		{
+			st = new StringTokenizer(f.readLine());
+			original[i] = Long.parseLong(st.nextToken());
+		}
+		long [] sorted = new long[n];
+		for(int i = 0; i < n; i ++)
+		{
+			sorted[i] = original[i];
+		}
+		Arrays.sort(sorted);
+		int ans = -1;
+		for(int i = 0; i < n; i ++)
+		{
+			ans = Math.max(ans, i - Arrays.binarySearch(sorted, original[i]));
+		}
+		out.println(ans + 1);
+		out.close();
+	}
+}
